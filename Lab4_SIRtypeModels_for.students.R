@@ -52,16 +52,15 @@ beta=520/365; gamma=1/7; mu=1/(70*365);
 ##############################  
 # ASSEMBLE YOUR PARAMETER SET FOR EACH MODEL
 ##############################
-if(F){
+if(T){
   
-  parameters.SIR =  # ASSEMBLE YOUR PARAMETER SET FOR EACH MODEL
+  parameters.SIR = c(beta=520/365, gamma=1/7) # ASSEMBLE YOUR PARAMETER SET FOR EACH MODEL
   
-  parameters.SIRdem =  # ASSEMBLE YOUR PARAMETER SET FOR EACH MODEL
+  parameters.SIRdem = c(beta=520/365, gamma=1/7, mu=1/(70*365)) # ASSEMBLE YOUR PARAMETER SET FOR EACH MODEL
     
 }
 
-  
-  
+
   
 
 times=seq(0,365*100,by=1);
@@ -78,11 +77,16 @@ i.SIRdem=sim.SIRdem[,'I']/N
 
 
 # EXAMPLE CODE FOR PLOTTING
-if(F){
+if(T){
   # plot results: S & I vs time
   par(mfrow=c(2,1),mar=c(3,3,1,1),mgp=c(1.8,.5,0))
   plot(sim.SIRdem[,'time'],s.SIRdem,ylab='% S',xlab='Time (day)', type='l',col='blue',lwd=1)
-  plot(sim.SIRdem[,'time'],i.SIRdem,ylab='% I',xlab='Time (day)', type='l',col='red',lwd=1)
+  plot(sim.SIRdem[,'time'],i.SIRdem,ylab='% I',xlab='Time (day)', 
+       main='%I vs. time SIR Model with Demography', type='l',col='red',lwd=1)
+  
+  plot(sim.SIR[,'time'],s.SIR,ylab='% S',xlab='Time (day)', type='l',col='blue',lwd=1)
+  plot(sim.SIR[,'time'],i.SIR,ylab='% I',xlab='Time (day)', 
+       main='%I vs. time. SIR Model', type='l',col='red',lwd=1)
   
   ## to see just the *first* few years: 
   # set the limit for x-axis using xlim=c(xmin,xmax)
@@ -112,7 +116,7 @@ SIS=function(t,state,parameters){
     
     # EQUATIONS for the SIS:
     dS=-beta*S*I/N+gamma*I;
-    dI= # FILL IN THE EQUATION HERE
+    dI= beta*S*I/N-gamma*I; # FILL IN THE EQUATION HERE
     
     # return the rate of change
     list(c(dS,dI))
@@ -161,11 +165,15 @@ SIR=function(t,state,parameters){
 SEIR=function(t,state,parameters){
   with(as.list(c(state,parameters)),{
     # rate of change
+    dS=-beta*S*I/N;
+    dE=beta*S*I/N-alpha*E;
+    dI=alpha*E-gamma*I;
     
-    # FILL IN YOUR SEIR MODEL HERE
-
+    # cumulative incidence
+    dcumInci=beta*S*I/N;
+    
     # return the rate of change
-    # RETURN ALL STATE VARIABLES: 
+    list(c(dS,dE,dI,dcumInci))
     
   }) # end with(as.list...)
 }
