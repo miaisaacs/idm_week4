@@ -103,7 +103,7 @@ if(T){
        type='l',col='red')
 }
 
-
+tail(sim.SIRdem, 1)
 
 
 
@@ -135,7 +135,19 @@ s=sim[,'S']/N
 i=sim[,'I']/N
 
 
+parameters.SIS = c(beta=0.5, gamma=0.3)
 
+# for the SISdem model
+sim.SIS=ode(y=state,times=times,func=SIS,parms=parameters.SIS);
+s.SIS=sim.SIS[,'S']/N
+i.SIS=sim.SIS[,'I']/N
+
+plot(sim.SIS[,'time'],s.SIS,ylab='S',xlab='Time (day)', 
+     main='S vs. time SIS Model', type='l',col='blue',lwd=1)
+plot(sim.SIS[,'time'],i.SIS,ylab='I',xlab='Time (day)', 
+     main='I vs. time. SIS Model', type='l',col='red',lwd=1)
+
+tail(sim.SIS, 1)
 
 
 
