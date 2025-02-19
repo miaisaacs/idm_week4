@@ -230,3 +230,22 @@ if(F){
   # REMEMBER TO ADD A LEGEND INDICATING WHAT YOU'RE PLOTTING
 }
 
+par(mfrow=c(3,1),cex=.8,mgp=c(1.8,.5,0),mar=c(3,3,1,1))
+
+# Susceptible population
+plot(times, s_SEIR, ylim=c(0,1),
+     ylab='% S', xlab='Time', type='l', col='blue')
+lines(times, s_SIR, col='blue', lty=2)
+legend("topright", legend=c("SEIR", "SIR"), col="blue", lty=c(1,2), bty="n")
+
+# Infected population
+ymax = max(i_SEIR, i_SIR) * 1.05
+plot(times, i_SEIR, ylim=c(0, ymax), col='red', ylab='% I', xlab='Time', type='l')
+lines(times, i_SIR, col='red', lty=2)
+legend("topright", legend=c("SEIR", "SIR"), col="red", lty=c(1,2), bty="n")
+
+# Incidence
+ymax=max(newi_SEIR,newi_SIR)*1.05
+plot(newi_SEIR,ylim=c(0,ymax),col='green',ylab='Incidence',xlab='Time', type='l')
+lines(newi_SIR,col='green',lty=2)
+legend("topright", legend=c("SEIR", "SIR"), col="green", lty=c(1,2), bty="n")
